@@ -1,122 +1,34 @@
 <template>
     <div class="msite">
         <!--首页头部-->
-        <HeaderTop title="昌平区北七家宏福科技园(337省道北)">
-            <span class="header_search" slot="left">
+        <HeaderTop :title="address.name">
+            <router-link class="header_search" slot="left" to="/search">
                 <i class="iconfont icon-sousuo"></i>
-            </span>
-            <span class="header_login" slot="right">
-                <span class="header_login_text">登录|注册</span>
-            </span>
+            </router-link>
+            <router-link class="header_login" slot="right" :to="userInfo._id ? '/userinfo' : '/login'">
+                <span class="header_login_text" v-if="!userInfo._id">登录|注册</span>
+                <span class="header_login_text" v-else>
+                    <i class="iconfont icon-wode"></i>
+                </span>
+            </router-link>
         </HeaderTop>
         <!--首页导航-->
         <nav class="msite_nav">
-            <div class="swiper-container">
+            <div class="swiper-container" v-if="categorys.length">
                 <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                        <a href="javascript:" class="link_to_food">
+                    <div class="swiper-slide" v-for="(categorys, index) in categorysArr" :key="index">
+                        <a href="javascript:" class="link_to_food" v-for="(category, index) in categorys" :key="index">
                             <div class="food_container">
-                                <img src="./images/nav/1.jpg">
+                                <img :src="baseImageUrl + category.image_url">
                             </div>
-                            <span>甜品饮品</span>
-                        </a>
-                        <a href="javascript:" class="link_to_food">
-                            <div class="food_container">
-                                <img src="./images/nav/2.jpg">
-                            </div>
-                            <span>商超便利</span>
-                        </a>
-                        <a href="javascript:" class="link_to_food">
-                            <div class="food_container">
-                                <img src="./images/nav/3.jpg">
-                            </div>
-                            <span>美食</span>
-                        </a>
-                        <a href="javascript:" class="link_to_food">
-                            <div class="food_container">
-                                <img src="./images/nav/4.jpg">
-                            </div>
-                            <span>简餐</span>
-                        </a>
-                        <a href="javascript:" class="link_to_food">
-                            <div class="food_container">
-                                <img src="./images/nav/5.jpg">
-                            </div>
-                            <span>新店特惠</span>
-                        </a>
-                        <a href="javascript:" class="link_to_food">
-                            <div class="food_container">
-                                <img src="./images/nav/6.jpg">
-                            </div>
-                            <span>准时达</span>
-                        </a>
-                        <a href="javascript:" class="link_to_food">
-                            <div class="food_container">
-                                <img src="./images/nav/7.jpg">
-                            </div>
-                            <span>预订早餐</span>
-                        </a>
-                        <a href="javascript:" class="link_to_food">
-                            <div class="food_container">
-                                <img src="./images/nav/8.jpg">
-                            </div>
-                            <span>土豪推荐</span>
-                        </a>
-                    </div>
-                    <div class="swiper-slide">
-                        <a href="javascript:" class="link_to_food">
-                            <div class="food_container">
-                                <img src="./images/nav/9.jpg">
-                            </div>
-                            <span>甜品饮品</span>
-                        </a>
-                        <a href="javascript:" class="link_to_food">
-                            <div class="food_container">
-                                <img src="./images/nav/10.jpg">
-                            </div>
-                            <span>商超便利</span>
-                        </a>
-                        <a href="javascript:" class="link_to_food">
-                            <div class="food_container">
-                                <img src="./images/nav/11.jpg">
-                            </div>
-                            <span>美食</span>
-                        </a>
-                        <a href="javascript:" class="link_to_food">
-                            <div class="food_container">
-                                <img src="./images/nav/12.jpg">
-                            </div>
-                            <span>简餐</span>
-                        </a>
-                        <a href="javascript:" class="link_to_food">
-                            <div class="food_container">
-                                <img src="./images/nav/13.jpg">
-                            </div>
-                            <span>新店特惠</span>
-                        </a>
-                        <a href="javascript:" class="link_to_food">
-                            <div class="food_container">
-                                <img src="./images/nav/14.jpg">
-                            </div>
-                            <span>准时达</span>
-                        </a>
-                        <a href="javascript:" class="link_to_food">
-                            <div class="food_container">
-                                <img src="./images/nav/1.jpg">
-                            </div>
-                            <span>预订早餐</span>
-                        </a>
-                        <a href="javascript:" class="link_to_food">
-                            <div class="food_container">
-                                <img src="./images/nav/2.jpg">
-                            </div>
-                            <span>土豪推荐</span>
+                            <span>{{ category.title }}</span>
                         </a>
                     </div>
                 </div>
                 <!-- Add Pagination -->
                 <div class="swiper-pagination"></div>
             </div>
+            <img src="./images/msite_back.svg" alt="back" v-else>
         </nav>
         <!--首页附近商家-->
         <div class="msite_shop_list">
@@ -124,218 +36,109 @@
                 <i class="iconfont icon-xuanxiang"></i>
                 <span class="shop_header_title">附近商家</span>
             </div>
-            <div class="shop_container">
-                <ul class="shop_list">
-                    <li class="shop_li border-1px">
-                        <a>
-                            <div class="shop_left">
-                                <img class="shop_img" src="./images/shop/1.jpg">
-                            </div>
-                            <div class="shop_right">
-                                <section class="shop_detail_header">
-                                    <h4 class="shop_title ellipsis">锄禾日当午，汗滴禾下土</h4>
-                                    <ul class="shop_detail_ul">
-                                        <li class="supports">保</li>
-                                        <li class="supports">准</li>
-                                        <li class="supports">票</li>
-                                    </ul>
-                                </section>
-                                <section class="shop_rating_order">
-                                    <section class="shop_rating_order_left">
-                                        <div class="star star-24">
-                                            <span class="star-item on"></span>
-                                            <span class="star-item on"></span>
-                                            <span class="star-item on"></span>
-                                            <span class="star-item half"></span>
-                                            <span class="star-item off"></span>
-                                        </div>
-                                        <div class="rating_section">
-                                            3.6
-                                        </div>
-                                        <div class="order_section">
-                                            月售106单
-                                        </div>
-                                    </section>
-                                    <section class="shop_rating_order_right">
-                                        <span class="delivery_style delivery_right">硅谷专送</span>
-                                    </section>
-                                </section>
-                                <section class="shop_distance">
-                                    <p class="shop_delivery_msg">
-                                        <span>¥20起送</span>
-                                        <span class="segmentation">/</span>
-                                        <span>配送费约¥5</span>
-                                    </p>
-                                </section>
-                            </div>
-                        </a>
-                    </li>
-                    <li class="shop_li border-1px">
-                        <a>
-                            <div class="shop_left">
-                                <img class="shop_img" src="./images/shop/2.jpg">
-                            </div>
-                            <div class="shop_right">
-                                <section class="shop_detail_header">
-                                    <h4 class="shop_title ellipsis">锄禾日当午，汗滴禾下土</h4>
-                                    <ul class="shop_detail_ul">
-                                        <li class="supports">保</li>
-                                        <li class="supports">准</li>
-                                        <li class="supports">票</li>
-                                    </ul>
-                                </section>
-                                <section class="shop_rating_order">
-                                    <section class="shop_rating_order_left">
-                                        <div class="star star-24">
-                                            <span class="star-item on"></span>
-                                            <span class="star-item on"></span>
-                                            <span class="star-item on"></span>
-                                            <span class="star-item on"></span>
-                                            <span class="star-item off"></span>
-                                        </div>
-                                        <div class="rating_section">
-                                            4.1
-                                        </div>
-                                        <div class="order_section">
-                                            月售106单
-                                        </div>
-                                    </section>
-                                    <section class="shop_rating_order_right">
-                                        <span class="delivery_style delivery_right">硅谷专送</span>
-                                    </section>
-                                </section>
-                                <section class="shop_distance">
-                                    <p class="shop_delivery_msg">
-                                        <span>¥20起送</span>
-                                        <span class="segmentation">/</span>
-                                        <span>配送费约¥5</span>
-                                    </p>
-                                </section>
-                            </div>
-                        </a>
-                    </li>
-                    <li class="shop_li border-1px">
-                        <a>
-                            <div class="shop_left">
-                                <img class="shop_img" src="./images/shop/3.jpg">
-                            </div>
-                            <div class="shop_right">
-                                <section class="shop_detail_header">
-                                    <h4 class="shop_title ellipsis">锄禾日当午，汗滴禾下土</h4>
-                                    <ul class="shop_detail_ul">
-                                        <li class="supports">保</li>
-                                        <li class="supports">准</li>
-                                        <li class="supports">票</li>
-                                    </ul>
-                                </section>
-                                <section class="shop_rating_order">
-                                    <section class="shop_rating_order_left">
-                                        <div class="star star-24">
-                                            <span class="star-item on"></span>
-                                            <span class="star-item on"></span>
-                                            <span class="star-item on"></span>
-                                            <span class="star-item off"></span>
-                                            <span class="star-item off"></span>
-                                        </div>
-                                        <div class="rating_section">
-                                            3.2
-                                        </div>
-                                        <div class="order_section">
-                                            月售106单
-                                        </div>
-                                    </section>
-                                    <section class="shop_rating_order_right">
-                                        <span class="delivery_style delivery_right">硅谷专送</span>
-                                    </section>
-                                </section>
-                                <section class="shop_distance">
-                                    <p class="shop_delivery_msg">
-                                        <span>¥20起送</span>
-                                        <span class="segmentation">/</span>
-                                        <span>配送费约¥5</span>
-                                    </p>
-                                </section>
-                            </div>
-                        </a>
-                    </li>
-                    <li class="shop_li border-1px">
-                        <a>
-                            <div class="shop_left">
-                                <img class="shop_img" src="./images/shop/4.jpg">
-                            </div>
-                            <div class="shop_right">
-                                <section class="shop_detail_header">
-                                    <h4 class="shop_title ellipsis">锄禾日当午，汗滴禾下土</h4>
-                                    <ul class="shop_detail_ul">
-                                        <li class="supports">保</li>
-                                        <li class="supports">准</li>
-                                        <li class="supports">票</li>
-                                    </ul>
-                                </section>
-                                <section class="shop_rating_order">
-                                    <section class="shop_rating_order_left">
-                                        <div class="star star-24">
-                                            <span class="star-item on"></span>
-                                            <span class="star-item on"></span>
-                                            <span class="star-item on"></span>
-                                            <span class="star-item half"></span>
-                                            <span class="star-item off"></span>
-                                        </div>
-                                        <div class="rating_section">
-                                            3.6
-                                        </div>
-                                        <div class="order_section">
-                                            月售106单
-                                        </div>
-                                    </section>
-                                    <section class="shop_rating_order_right">
-                                        <span class="delivery_style delivery_right">硅谷专送</span>
-                                    </section>
-                                </section>
-                                <section class="shop_distance">
-                                    <p class="shop_delivery_msg">
-                                        <span>¥20起送</span>
-                                        <span class="segmentation">/</span>
-                                        <span>配送费约¥5</span>
-                                    </p>
-                                </section>
-                            </div>
-                        </a>
-                    </li>
-                </ul>
-            </div>
+            <ShopList></ShopList>
         </div>
     </div>
 </template>
 
 <script>
 import HeaderTop from '../../components/HeaderTop/HeaderTop.vue';
-import Swiper from 'swiper'
-import 'swiper/css/swiper.min.css'
+import ShopList from '../../components/ShopList/ShopList.vue';
+
+import Swiper from 'swiper';
+import 'swiper/css/swiper.min.css';
+
+import { mapState } from 'vuex';
 export default {
     data() {
         return {
-
+            baseImageUrl: 'http://fuss10.elemecdn.com'
+        }
+    },
+    computed: {
+        ...mapState(['address', 'categorys', 'userInfo']),
+        /**
+         * 根据categorys一维数组生成一个二维数组
+         * 小数组中的元素个数最大是8
+         */
+        categorysArr() {
+            const { categorys } = this
+            // 准备空的二维数组
+            const arr = []
+            // 准备一个小数组（最大长度为8）
+            let minArr = []
+            // 遍历categorys
+            categorys.forEach(c => {
+                // 如果当前小数组已经满了，创建一个新的
+                if (minArr.length === 8) {
+                    minArr = []
+                }
+                // 如果minArr是空的，将小数组保存到大数组中
+                if (minArr.length === 0) {
+                    arr.push(minArr)
+                }
+                // 将当前分类保存到小数组中
+                minArr.push(c)
+            });
+            return arr;
+        }
+    },
+    watch: {
+        categorys(value) {//categorys数组中有数据了执行，在异步更新界面之前执行
+            // 界面更新就立即创建swiper对象
+            this.$nextTick(() => {// 一旦完成界面更新，立即调用（此条语句要写在数据更新之后）
+                // 创建一个swiper实例对象，来实现轮播
+                new Swiper('.swiper-container', {
+                    loop: true, // 可以循环轮播
+                    // 如果需要分页器
+                    pagination: {
+                        el: '.swiper-pagination',
+                    }
+                })
+            })
         }
     },
     components: {
-        HeaderTop
+        HeaderTop,
+        ShopList
     },
     mounted() {
-        // 创建一个swiper实例对象，来实现轮播
-        new Swiper('.swiper-container', {
-            loop: true, // 可以循环轮播
-            // 如果需要分页器
-            pagination: {
-                el: '.swiper-pagination',
-            }
-        })
+        this.$store.dispatch('getCategorys')
+        this.$store.dispatch('getShops')
+
     }
 }
 </script>
 
 <style lang="scss" rel="stylesheet/scss" scoped>
 @import "../../common/scss/mixins.scss";
+
+.header_search {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 10%;
+    height: 50%;
+
+    .icon-sousuo {
+        font-size: 25px;
+        color: rgb(255, 255, 255);
+    }
+}
+
+.header_login {
+    font-size: 14px;
+    color: #fff;
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    .header_login_text {
+        color: #fff;
+    }
+}
 
 .msite {
     //首页
@@ -414,238 +217,6 @@ export default {
                 color: #999;
                 font-size: 14px;
                 line-height: 20px;
-            }
-        }
-
-        .shop_container {
-            margin-bottom: 50px;
-
-            .shop_list {
-                .shop_li {
-                    @include bottom-border-1px(#f1f1f1);
-                    width: 100%;
-
-                    >a {
-                        @include clearFix();
-                        display: block;
-                        box-sizing: border-box;
-                        padding: 15px 8px;
-                        width: 100%;
-
-                        .shop_left {
-                            float: left;
-                            box-sizing: border-box;
-                            width: 23%;
-                            height: 75px;
-                            padding-right: 10px;
-
-                            .shop_img {
-                                display: block;
-                                width: 100%;
-                                height: 100%;
-                            }
-                        }
-
-                        .shop_right {
-                            float: right;
-                            width: 77%;
-
-                            .shop_detail_header {
-                                @include clearFix();
-                                width: 100%;
-
-                                .shop_title {
-                                    float: left;
-                                    width: 200px;
-                                    color: #333;
-                                    font-size: 16px;
-                                    line-height: 16px;
-                                    font-weight: 700;
-
-                                    &::before {
-                                        content: '品牌';
-                                        display: inline-block;
-                                        font-size: 11px;
-                                        line-height: 11px;
-                                        color: #333;
-                                        background-color: #ffd930;
-                                        padding: 2px 2px;
-                                        border-radius: 2px;
-                                        margin-right: 5px;
-                                    }
-                                }
-
-                                .shop_detail_ul {
-                                    float: right;
-                                    margin-top: 3px;
-
-                                    .supports {
-                                        float: left;
-                                        font-size: 10px;
-                                        color: #999;
-                                        border: 1px solid #f1f1f1;
-                                        padding: 0 2px;
-                                        border-radius: 2px;
-                                    }
-                                }
-                            }
-
-                            .shop_rating_order {
-                                @include clearFix();
-                                width: 100%;
-                                margin-top: 18px;
-                                margin-bottom: 8px;
-
-                                .shop_rating_order_left {
-                                    float: left;
-                                    color: #ff9a0d;
-
-                                    .star {
-                                        float: left;
-                                        font-size: 0;
-
-                                        .star-item {
-                                            display: inline-block;
-                                            background-repeat: no-repeat;
-                                        }
-
-                                        &.star-48 {
-                                            .star-item {
-                                                width: 20px;
-                                                height: 20px;
-                                                margin-right: 22px;
-                                                background-size: 20px 20px;
-
-                                                &:last-child {
-                                                    margin-right: 0;
-                                                }
-
-                                                &.on {
-                                                    @include bg-image('./images/stars/star48_on');
-                                                }
-
-                                                &.half {
-                                                    @include bg-image('./images/stars/star48_half');
-                                                }
-
-                                                &.off {
-                                                    @include bg-image('./images/stars/star48_off');
-                                                }
-                                            }
-                                        }
-
-                                        &.star-36 {
-                                            .star-item {
-                                                width: 15px;
-                                                height: 15px;
-                                                margin-right: 6px;
-                                                background-size: 15px 15px;
-
-                                                &:last-child {
-                                                    margin-right: 0;
-                                                }
-
-                                                &.on {
-                                                    @include bg-image('./images/stars/star36_on');
-                                                }
-
-                                                &.half {
-                                                    @include bg-image('./images/stars/star36_half');
-                                                }
-
-                                                &.off {
-                                                    @include bg-image('./images/stars/star36_off');
-                                                }
-                                            }
-                                        }
-
-                                        &.star-24 {
-                                            .star-item {
-                                                width: 10px;
-                                                height: 10px;
-                                                margin-right: 3px;
-                                                background-size: 10px 10px;
-
-                                                &:last-child {
-                                                    margin-right: 0;
-                                                }
-
-                                                &.on {
-                                                    @include bg-image('./images/stars/star24_on');
-                                                }
-
-                                                &.half {
-                                                    @include bg-image('./images/stars/star24_half');
-                                                }
-
-                                                &.off {
-                                                    @include bg-image('./images/stars/star24_off');
-                                                }
-                                            }
-                                        }
-                                    }
-
-                                    .rating_section {
-                                        float: left;
-                                        font-size: 10px;
-                                        color: #ff6000;
-                                        margin-left: 4px;
-                                    }
-
-                                    .order_section {
-                                        float: left;
-                                        font-size: 10px;
-                                        color: #666;
-                                        transform: scale(0.8);
-                                    }
-                                }
-
-                                .shop_rating_order_right {
-                                    float: right;
-                                    font-size: 0;
-
-                                    .delivery_style {
-                                        transform-origin: 35px 0;
-                                        transform: scale(0.7);
-                                        display: inline-block;
-                                        font-size: 12px;
-                                        padding: 1px;
-                                        border-radius: 2px;
-                                    }
-
-                                    .delivery_left {
-                                        color: #fff;
-                                        margin-right: -10px;
-                                        background-color: #02a774;
-                                        border: 1px solid #02a774;
-                                    }
-
-                                    .delivery_right {
-                                        color: #02a774;
-                                        border: 1px solid #02a774;
-                                    }
-                                }
-                            }
-
-                            .shop_distance {
-                                @include clearFix();
-                                width: 100%;
-                                font-size: 12px;
-
-                                .shop_delivery_msg {
-                                    float: left;
-                                    transform-origin: 0;
-                                    transform: scale(0.9);
-                                    color: #666;
-                                }
-
-                                .segmentation {
-                                    color: #ccc;
-                                }
-                            }
-                        }
-                    }
-                }
             }
         }
     }

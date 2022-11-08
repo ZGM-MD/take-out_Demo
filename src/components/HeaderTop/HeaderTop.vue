@@ -12,7 +12,7 @@
 export default {
     props: {
         title: String
-    }
+    },
 }
 </script>
 
@@ -36,7 +36,7 @@ export default {
 
         .icon-sousuo {
             font-size: 25px;
-            color: #fff;
+            color: rgb(255, 255, 255);
         }
     }
 
